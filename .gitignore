@@ -1,0 +1,12 @@
+.DS_Store
+.Rapp.history
+*.swp
+data/*
+log/*
+results/*
+methods/*
+methods.csv
+runCases.csv
+runStatus.Rdata
+results.Rdata
+site_setup.R
