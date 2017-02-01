@@ -37,6 +37,12 @@ addMethodsToRunStatus <- function(runStatus, methods)
   runStatus
 }
 
+removeMethodsFromRunStatus <- function(runStatus, methods)
+{
+  for (method in methods) runStatus[[method]] <- NULL
+  runStatus
+}
+
 ## dirs should be a named list with at least results and log
 updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
 {
@@ -81,7 +87,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
 	suppressWarnings(rawRunTimes <- system2("grep", c("-E", paste0("'^", runCaseNames[j], ",[0-9]+,([0-9.]+|(NA))$'")),
 			                        stdin = logFile, stdout = TRUE))
 	if (length(rawRunTimes) == 0L || !is.null(attr(rawRunTimes, "status"))) {
-	  cat("  error parsing ", paste0(methodName, .Platform$file.sep, logFileName), "\n", sep = "")
+	  cat("  warning: could not parse ", paste0(methodName, .Platform$file.sep, logFileName), "\n", sep = "")
 	} else {
 	  stringConnection <- textConnection(rawRunTimes)
 	  rawRunTimes.j <- read.csv(stringConnection, header = FALSE, col.names = c("setting", "iter", "runTime"))
@@ -111,20 +117,4 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
     }
   }
   runStatus
-}
-
-## update with new results
-if (FALSE) {
-  source("site_setup.R")
-  load("runStatus.Rdata")
-  runStatus <- updateRunStatus(runStatus, dirs)
-}
-
-## create run status
-if (FALSE) {
-  source("site_setup.R")
-  runCases <- read.csv("runCases.csv")
-  methods <- read.csv("methods.csv")
-  runStatus <- createRunStatus(runCases, methods)
-  save(runStatus, file = "runStatus.Rdata")
 }

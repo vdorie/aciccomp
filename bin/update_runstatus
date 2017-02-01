@@ -1,0 +1,24 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+
+source("site_setup.R")
+
+runMethods <- if (length(args) > 0L) args else NULL
+
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+if (!is.null(runMethods) && any(!(runMethods %in% methods$name)))
+  stop("unrecognized methods: ", paste0(runMethods[!(runMethods %in% methods$name)], collapse = ", "))
+
+source(file.path(dirs$src, "runStatus.R"))
+
+if (!file.exists("runStatus.Rdata")) {
+  runCases <- read.csv("runCases.csv")
+  runStatus <- createRunStatus(runCases, methods)
+} else {
+  load("runStatus.Rdata")
+}
+
+runStatus <- updateRunStatus(runStatus, dirs, runMethods)
+
+save(runStatus, file = "runStatus.Rdata")

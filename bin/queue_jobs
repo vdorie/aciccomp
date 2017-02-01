@@ -1,0 +1,20 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+
+source("site_setup.R")
+
+runMethods <- if (length(args) > 0L) args else NULL
+
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+if (!is.null(runMethods) && any(!(runMethods %in% methods$name)))
+  stop("unrecognized methods: '", paste0(runMethods[!(runMethods %in% methods$name)], collapse = "', '"), "'")
+
+source(file.path(dirs$src, "queueJobs.R"))
+
+if (!file.exists("runStatus.Rdata"))
+  stop("runStatus.Rdata does not exist, run 'update_runstatus' first")
+
+load("runStatus.Rdata")
+
+queueJobs(runStatus, methods, dirs, args, dryRun = TRUE)

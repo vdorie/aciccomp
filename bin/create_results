@@ -1,0 +1,23 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+
+if (length(args) == 0L)
+  stop("usage: create_results result_name_1 [result_name_2] ...")
+
+source("site_setup.R")
+
+if (!file.exists("runStatus.Rdata")) {
+  runCases <- read.csv("runCases.csv")
+  methods  <- read.csv("methods.csv", stringsAsFactors = FALSE)
+  
+  source(file.path(dirs$src, "runStatus.R"))
+  runStatus <- createRunStatus(runCases, methods)
+} else {
+  load("runStatus.Rdata")
+}
+
+source(file.path(dirs$src, "results.R"))
+
+results <- createResults(runStatus, args)
+
+save(results, file = "results.Rdata")

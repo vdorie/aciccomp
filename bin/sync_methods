@@ -1,0 +1,30 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+if (length(args) != 0L)
+  stop("usage: sync_methods\n",
+       "       methods must be in methods.csv")
+
+source("site_setup.R")
+
+source(file.path(dirs$src, "runStatus.R"))
+source(file.path(dirs$src, "results.R"))
+
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+load("runStatus.Rdata")
+load("results.Rdata")
+
+newMethods <- methods$name[!(methods$name %in% names(runStatus))]
+if (length(newMethods) > 0L) {
+  runStatus <- addMethodsToRunStatus(runStatus, newMethods)
+  results   <- addMethodsToResults(results, newMethods)
+}
+
+oldMethods <- methods$name[!(names(runStatus) %in% methods$name)]
+if (length(oldMethods) > 0L) {
+  runStatus <- removeMethodsFromRunStatus(runStatus, oldMethods)
+  results   <- removeMethodsFromResults(results, oldMethods)
+}
+
+save(runStatus, file = "runStatus.Rdata")
+save(results, file = "results.Rdata")

@@ -1,0 +1,39 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+
+if (length(args) == 0L)
+  stop("usage: update_results functionFile.R [method_1] [method_2] ...")
+
+source("site_setup.R")
+
+if (!file.exists("runStatus.Rdata"))
+  stop("runStatus.Rdata not found, run 'update_runstatus' first")
+
+if (!file.exists("results.Rdata"))
+  stop("results.Rdata not found, run 'create_results' first")
+
+runMethods <- if (length(args) > 1L) args[-1L] else NULL
+
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+if (!is.null(runMethods) && any(!(runMethods %in% methods$name)))
+  stop("unrecognized methods: '", paste0(runMethods[!(runMethods %in% methods$name)], collapse = "', '"), "'")
+
+if (!file.exists(args[1L]))
+  stop("cannot find file '", args[1L], "'")
+
+cat("args: ", args[1L], "\n", sep = "")
+source(args[1L], local = TRUE)
+
+if (!exists("evaluation_functions") || !is.list(evaluation_functions) || is.null(names(evaluation_functions)) ||
+    any(sapply(evaluation_functions, class) != "function"))
+ stop("'", args[1L], "' must define a named-list of functions 'evaluation_functions'")
+
+load("runStatus.Rdata")
+load("results.Rdata")
+
+source(file.path(dirs$src, "results.R"))
+
+results <- updateResults(runStatus, results, dirs, evaluation_functions, runMethods)
+
+save(results, file = "results.Rdata")

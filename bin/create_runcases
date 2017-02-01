@@ -1,0 +1,11 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+if (length(args) != 0L)
+  stop("usage: create_runcases")
+
+source("site_setup.R")
+
+source(file.path(dirs$src, "runCases.R"))
+
+runCases <- collectRunCasesFromDirectory(dirs)
+write.csv(runCases, "runCases.csv", row.names = FALSE)

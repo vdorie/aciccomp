@@ -17,7 +17,7 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
     method <- methods[i,]
     if (!is.null(runMethods) && !(method$name %in% runMethods)) next
     
-    cat("fitting method '", as.character(method$name), "'\n", sep = "")
+    cat("fitting method '", method$name, "'\n", sep = "")
     
     command <- file.path(dirs$methods, method$name)
     
@@ -39,7 +39,7 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
       currentResultIndices <- which(runStatus[[i]][[j]]$status %in% c("complete", "hung"))
       if (length(currentResultIndices) == length(iters)) next
     
-      cat("fitting method '", as.character(method$name), "' in setting '", runCaseNames[j], "'\n", sep = "", file = logCon)
+      cat("fitting method '", method$name, "' in setting '", runCaseNames[j], "'\n", sep = "", file = logCon)
       
       dataDir <- file.path(dirs$data, runCaseDir)
       
@@ -93,11 +93,4 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
     }
   }
   unlink(inFile)
-}
-
-if (FALSE) {
-  source("site_setup.R")
-  load("runStatus.Rdata")
-  methods  <- read.csv("methods.csv")
-  runLocally(runStatus, methods, dirs)
 }

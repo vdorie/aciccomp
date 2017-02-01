@@ -30,6 +30,15 @@ addMethodsToResults <- function(results, methods) {
   results
 }
 
+removeMethodsFromResults <- function(results, methods) {
+  keepIndices <- !(dimnames(results[[1L]])[[1L]] %in% methods)
+  
+  for (i in seq_along(results))
+    results[[i]] <- results[[i]][keepIndices,,drop = FALSE]
+  
+  results
+}
+
 updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL)
 {
   if (length(runStatus) == 0L) return(results)
@@ -38,7 +47,7 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
     methodName <- names(runStatus)[i]
     if (!is.null(runMethods) && !(methodName %in% runMethods)) next
     
-    cat("updating results for method '", methodName, "'\n")
+    cat("updating results for method '", methodName, "'\n", sep = "")
     
     for (j in seq_along(runStatus[[i]])) {
       completedIndices <- runStatus[[i]][[j]]$status == "complete"
@@ -64,30 +73,4 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
     }
   }
   results
-}
-
-if (FALSE) {
-  source("site_setup.R")
-  load("runStatus.Rdata")
-  
-  results <- createResults(runStatus, c("bias", "coverage"))
-  save(results, file = "results.Rdata")
-}
-
-if (FALSE) {
-  source("site_setup.R")
-  load("runStatus.Rdata")
-  load("results.Rdata")
-  
-  ## not actually bias, obviously
-  biasFn <- function(data, results, results.ind) {
-    (mean(data$y[data$z == 1]) - mean(data$y[data$z == 0])) - results$est
-  }
-  ## and obviously not coverage
-  coverageFn <- function(data, results, results.ind) {
-    te <- mean(data$y[data$z == 1]) - mean(data$y[data$z == 0])
-    results$ci_lower <= te & te <= results$ci_upper
-  }
-  
-  results <- updateResults(runStatus, results, dirs, list(bias = biasFn, coverage = coverageFn))
 }

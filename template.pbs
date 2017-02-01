@@ -1,0 +1,23 @@
+#!/bin/sh
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=24:00:00
+#PBS -l mem=8GB
+#PBS -N _JOBNAME_
+#PBS -M vjd4@nyu.edu
+#PBS -m a
+#PBS -e $HOME/log/_JOBNAME_.error
+#PBS -o $HOME/log/_JOBNAME_.log
+
+_MODULE_
+RUNDIR=$HOME/acic
+
+export METHOD=_METHOD_
+export RUNCASE=_RUNCASE_
+export DATA_DIR=_DATA_DIR_
+export METHOD_DIR=_METHOD_DIR_
+
+rm -f $HOME/log/_JOBNAME_.error
+rm -f $HOME/log/_JOBNAME_.log
+
+cd $RUNDIR
+R --no-save < src/runJob.R

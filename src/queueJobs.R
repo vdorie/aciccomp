@@ -4,6 +4,8 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
   
   runCaseNames <- names(runStatus[[1L]])
   
+  if (!dir.exists(dirs$job)) dir.create(dirs$job, recursive = TRUE)
+  
   for (i in seq_len(nrow(methods))) {
     method <- methods[i,]
     if (!is.null(runMethods) && !(method$name %in% runMethods)) next
@@ -23,9 +25,9 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
     for (j in seq_along(runCaseNames)) {
       if (all(runStatus[[i]][[j]]$status %in% c("complete", "hung"))) next
       
-      jobName <- paste0(method$name, "_", j)
+      jobName <- paste0(method$name, "_", runCaseNames[j])
       
-      jobFile <- file.path("job", paste0(jobName, ".pbs"))
+      jobFile <- file.path(dirs$job, paste0(jobName, ".pbs"))
       
       args <- paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_|", j, "|;",
                      "s|_DATA_DIR_|", dirs$data, "|;s|_METHOD_DIR_|", dirs$methods,
@@ -41,11 +43,4 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
       cat("\n")
     }
   }
-}
-
-if (FALSE) {
-  source("site_setup.R")
-  load("runStatus.Rdata")
-  methods <- read.csv("methods.csv")
-  queueJobs(runStatus, methods, dirs)
 }

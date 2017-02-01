@@ -4,12 +4,14 @@ This repo contains the code to run causal inference methods against a set of dat
 
 # Directory Structure
 
-Because the contest contents are a secret, most of the import files go in sub-directories that are currently empty. These directories are
+Because the contest contents are a secret, most of the important files go in sub-directories that are currently empty. The required subdirectories are
 
   * `data`
   * `log`
   * `methods`
   * `results`
+  * `job`
+  * `src`
 
 They can be located anywhere, but in general the code expects them to defined before running. The easiest way to do this to create a file `site_setup.R` at the top-level that will be `source`d and contains something like:
 
@@ -17,7 +19,8 @@ They can be located anywhere, but in general the code expects them to defined be
                  log     = "log",
                  methods = "methods",
                  results = "results",
-                 src     = "src")
+                 src     = "src",
+                 job     = "job")
 
 ## `data`
 
@@ -48,20 +51,16 @@ These are created automatically.
 Since the code needs to track submissions that come in over time and the results of those submissions that come in and may or may not fail, the procedure involves a number of intermediate steps. In general:
 
   1. Drop datasets of interest in the `data` folder
-  2. Create a `runCases` csv which scans the contents of the data folder and enumerates all the iterations (code in `src/runCases.R`). These should probably be set before the competition is run.
-  3. Synchronize the files in the `methods` folder with the contents of `methods.csv`.
-  3. Create a `runStatus` Rdata object (`src/runStatus.R`), which holds the status of every method run on every data set (success, failure, hang, etc.).
-  4. Create a `results` Rdata object (`src/results.R`), which holds values derived from the input files and estimates computed by each method.
+  2. Create a `runCases` csv which scans the contents of the data folder and enumerates all the iterations (`bin/create_runcases`). These should probably be set before the competition is run.
+  3. Synchronize the executables/scripts in the `methods` folder with the contents of `methods.csv`.
+  3. Create a `runStatus` Rdata object (`bin/update_runstatus`), which holds the status of every method run on every data set (success, failure, hang, etc.).
+  4. Create a `results` Rdata object (`bin/create_results bias coverage ...`), which holds values derived from the input files and estimates computed by each method.
 
 The above steps need to be run prior to spawning off any processes. Once they are in place, methods can be fit by running:
 
-  5. Queue jobs (`src/queueJobs.R`) or run them locally (`src/runLocally.R`). This proceeds through each method, simulation setting/DGP, and iteration, creating a temp file that contains the input and storing the output in the `results` folder.
-  6. Update the `runStatus` - this scans the results and log folders to see what has completed.
-  7. Update the `results` - this uses the runStatus and current value of results to see what needs to be computed to bring the derived results in line with raw computations.
-
-## `run` folder
-
-To automate these procedures, files should be placed in a `run` folder that combine the reading and executing of code.
+  5. Queue jobs (`bin/queue_jobs`) or run them locally (`bin/run_locally`). This proceeds through each method, simulation setting/DGP, and iteration, creating a temp file that contains the input and storing the output in the `results` folder.
+  6. Update the `runStatus` (`bin/update_runstatus`) - this scans the results and log folders to see what has completed.
+  7. Update the `results` (`bin/update_results evaluation_functions.R`) - this uses the runStatus and current value of results to see what needs to be computed to bring the derived results in line with raw computations.
 
 # `methods.csv`
 
@@ -74,4 +73,3 @@ This needs to be a csv with columns:
   * `abbreviation` used in plotting
   * `individual_effects` `0/1` if the method is capable of computing individual effects
   * `language` `R`/`matlab`/`stata`/`python`/etc; Each needs to be supported
-

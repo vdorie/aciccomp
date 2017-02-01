@@ -1,3 +1,5 @@
+## gets important values from the environment, expects to be run in a directory
+## where runCases.csv, methods.csv, and runStatus.Rdata all exist
 method <- Sys.getenv("METHOD")
 runCaseName <- Sys.getenv("RUNCASE")
 
@@ -5,7 +7,7 @@ dataDir <- Sys.getenv("DATA_DIR")
 methodDir <- Sys.getenv("METHOD_DIR")
 
 runCases <- read.csv("runCases.csv")
-methods <- read.csv("methods.csv")
+methods <- read.csv("methods.csv", stringsAsFactors = TRUE)
 load("runStatus.Rdata")
 
 runStatus <- runStatus[[which(methods$name == method$name)]][[which(names(runStatus[[1L]]) == runCaseName)]]
@@ -31,7 +33,7 @@ if (!dir.exists(resultsDir)) dir.create(resultsDir, recursive = TRUE)
 currentResultIndices <- which(runStatus$status %in% c("complete", "hung"))
 if (length(currentResultIndices) == length(iters)) { unlink(inFile); q("no") }
 
-cat("fitting method '", as.character(method$name), "' in setting '", runCaseName, "'\n", sep = "")
+cat("fitting method '", method$name, "' in setting '", runCaseName, "'\n", sep = "")
 
 dataDir <- file.path(dataDir, runCaseDir)
 
