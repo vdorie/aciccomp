@@ -86,7 +86,9 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
   * `run_locally [method ...]` - runs methods against datasets on the local machine; optionally does so only for the methods listed
   * `queue_jobs [method ...]` - copies and `template.pbs` to the `job` folder, edits it, and spawns off a process for each method and each simulation setting; optionally does so only for the methods listed
 
-# Example
+# Examples
+
+## Getting Started
 
     mkdir ~/acic
     cd ~/acic
@@ -96,12 +98,12 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
     ## transfer data, including x.csv and simulation subdirectories
     scp https://somewhere.edu/data.tar.gz .
     tar xzf data.tar.gz
-    rm(data.tar.gz)
+    rm data.tar.gz
     
     ## transfer methods, including methods.csv and methods folder
     scp https://somewhere.edu/methods.tar.gz .
     tar xzf methods.csv
-    rm(methods.tar.gz)
+    rm methods.tar.gz
     
     ## configure directories
     echo 'dirs <- list(
@@ -135,3 +137,25 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
     bin/update_results
     
     ## transfer run status and results off of the cluster
+
+## Changing the Data
+
+    ## transfer in new data
+    rm -rf data
+    scp https://somewhere.edu/data.tar.gz .
+    tar xzf data.tar.gz
+    rm data.tar.gz
+    
+    bin/create_runcases
+    rm runStatus.Rdata
+    bin/update_runstatus
+    bin/create_results bias coverage
+    
+    ## run as before
+
+## Adding Methods
+   
+    ## add a method file to the methods fold, line to methods.csv
+    bin/sync_methods
+    
+    ## run as before
