@@ -104,12 +104,13 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
     rm(methods.tar.gz)
     
     ## configure directories
-    echo 'dirs <- list(data    = "data",
-                 log     = "log",
-                 methods = "methods",
-                 results = "results",
-                 src     = "src",
-                 job     = "job")' > site_setup.R
+    echo 'dirs <- list(
+      data    = "data",
+      log     = "log",
+      methods = "methods",
+      results = "results",
+      src     = "src",
+      job     = "job")' > site_setup.R
     
     ## create resource files
     bin/create_runcases
@@ -126,4 +127,11 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
         results$ci_lower <= te && te <= resutls$ci_upper
       })' > evaluation_functions.R
     
+    ## run methods
+    bin/queue_jobs
     
+    ## wait 2 days to harvest the results
+    bin/update_runstatus
+    bin/update_results
+    
+    ## transfer run status and results off of the cluster
