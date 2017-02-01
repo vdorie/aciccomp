@@ -1,0 +1,40 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+
+source("site_setup.R")
+
+runMethods <- if (length(args) > 0L) args else NULL
+
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+if (!is.null(runMethods) && any(!(runMethods %in% methods$name)))
+  stop("unrecognized methods: ", paste0(runMethods[!(runMethods %in% methods$name)], collapse = ", "))
+
+if (!file.exists("runStatus.Rdata"))
+  stop("runStatus.Rdata does not exist, run 'update_runstatus' first")
+
+if (!file.exists("results.Rdata"))
+  stop("results.Rdata does not exist, run 'create_results' first")
+
+load("runStatus.Rdata")
+load("results.Rdata")
+
+for (i in seq_along(runStatus)) {
+  methodName <- names(runStatus)[i]
+  if (!is.null(runMethods) && !(methodName %in% runMethods)) next
+  
+  printedName <- FALSE
+  for (j in seq_along(runStatus[[i]])) {
+    if (sum(is.na(results[[1L]][i,j,])) != sum(runStatus[[i]][[j]]$status != "complete")) {
+      if (!printedName) {
+        cat("method ", methodName, ":\n", sep = "")
+        printedName <- TRUE
+      }
+      
+      result.ij <- results[[1L]][i,j,]
+      status.ij <- runStatus[[i]][[j]]$status
+      cat("  setting ", names(runStatus[[i]])[j], ": ", sum(is.na(result.ij)), " NA result, ", sum(status.ij == "missing"), " missing, ",
+        sum(status.ij == "failed"), " failed, and ", sum(status.ij == "hung"), " hung\n", sep = "")
+    }
+  }
+}
