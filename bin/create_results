@@ -2,7 +2,7 @@
 args <- commandArgs(TRUE)
 
 if (length(args) == 0L)
-  stop("usage: create_results result_name_1 [result_name_2] ...")
+  stop("usage: create_results result [result ...]")
 
 source("site_setup.R")
 
