@@ -159,3 +159,14 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
     bin/sync_methods
     
     ## run as before
+
+## Other Issues
+
+It can be helpful to setup R on a new, shared environment to use a local library folder:
+
+    echo 'R_LIBS_USER="~/.R/%p-library/%v"' > ~/.Renviron
+    R_PLATFORM=$(R --no-save --slave -e 'cat(R.version$platform)')
+    R_VERSION=$(R --no-save --slave -e 'cat(R.version$major, ".", sub("([0-9]+)\\.[0-9]+", "\\1", R.version$minor), sep = "")')
+    mkdir -p ~/.R/${R_PLATFORM}-library/${R_VERSION}
+    unset R_PLATFORM
+    unset R_VERSION
