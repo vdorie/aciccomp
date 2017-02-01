@@ -130,7 +130,10 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
       })' > evaluation_functions.R
     
     ## run methods
-    bin/queue_jobs
+    # it can take a while for the queueing to take place, so this spawns
+    # off an uninterruptible task and saves the output; you can log-off after
+    # starting it
+    nohup bin/queue_jobs > queue.log 2>&1 &
     
     ## wait 2 days to harvest the results
     bin/update_runstatus

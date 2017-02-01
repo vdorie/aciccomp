@@ -35,12 +35,12 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
       system2("sed", args,
               stdin  = "template.pbs",
               stdout = jobFile)
-      if (dryRun)
-        cat("queueing ", jobName, ":\n", sep = "")
+      cat("queueing ", jobName, ":\n", sep = "")
       print(format(subset(runStatus[[i]][[j]], status != "complete" & status != "hung")))
       if (!dryRun)
         system2("qsub", jobFile)
-      cat("\n")
+      if (dryRun)
+        cat("\n")
     }
   }
 }
