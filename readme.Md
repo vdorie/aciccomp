@@ -85,6 +85,7 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
   * `update_results evaluation_functions.R` - updates the `results` object by using the functions defined in its first argument to collapse the data and estimate down to a single-value summary; `evaluation_functions.R` must define an object `evaluation_functions` that is a named list of functions with the prototype `function(data, results, results.ind)`, where good `results.ind` is supplied only if the method provides individual treatment effect estimates
   * `run_locally [method ...]` - runs methods against datasets on the local machine; optionally does so only for the methods listed
   * `queue_jobs [method ...]` - copies and `template.pbs` to the `job` folder, edits it, and spawns off a process for each method and each simulation setting; optionally does so only for the methods listed
+  * `print_runstatus [method ...]` - summarizes the run status in terms of those missing, hung, etc; optionally does so only for the methods listed
 
 # Examples
 
