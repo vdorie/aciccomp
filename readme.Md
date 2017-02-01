@@ -1,6 +1,6 @@
 # Overview
 
-This repo contains the code to run causal inference methods against a set of data files and track the results.
+This repo contains the code to run causal inference methods against a set of data files and track the results. For a quick-start, skip to the examples section at the end.
 
 # Directory Structure
 
