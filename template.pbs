@@ -8,7 +8,6 @@
 #PBS -e $HOME/log/_JOBNAME_.error
 #PBS -o $HOME/log/_JOBNAME_.log
 
-_MODULE_
 RUNDIR=$HOME/acic
 
 export METHOD=_METHOD_
