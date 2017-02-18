@@ -19,14 +19,15 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
       
       jobFile <- file.path(dirs$job, paste0(jobName, ".pbs"))
       
-      args <- paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_|", j, "|;",
-                     "s|_DATA_DIR_|", dirs$data, "|;s|_METHOD_DIR_|", dirs$methods,
-                     "s|_JOBNAME_|", jobName, "|'")
+      args <- c("-r", "-e",
+                paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_|", j, "|;",
+                       "s|_DATA_DIR_|", dirs$data, "|;s|_METHOD_DIR_|", dirs$methods,
+                       "s|_JOBNAME_|", jobName, "|'"))
       system2("sed", args,
               stdin  = "template.pbs",
               stdout = jobFile)
       cat("queueing ", jobName, ":\n", sep = "")
-      print(format(subset(runStatus[[i]][[j]], status != "complete" & status != "hung")))
+      with(runStatus[[i]][[j]], cat("  ", sum(status == "NA"), " NA, ", sum(status == "missing"), " missing, ", sum(status == "failed"), " failed\n", sep = ""))
       if (!dryRun)
         system2("qsub", jobFile)
       if (dryRun)
