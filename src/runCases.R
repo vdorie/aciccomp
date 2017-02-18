@@ -22,10 +22,3 @@ collectRunCasesFromDirectory <- function(dirs) {
   data.frame(name = rep(runCaseNames, sapply(runCaseIndices, length)),
              iter = unlist(lapply(runCaseIndices, function(x) sort(runCases$iter[x]))))
 }
-
-## code to generate runCases.csv
-if (FALSE) {
-  source("site_setup.R")
-  runCases <- collectRunCasesFromDirectory(dirs)
-  write.csv(runCases, "runCases.csv", row.names = FALSE)
-}

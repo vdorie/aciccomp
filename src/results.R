@@ -45,7 +45,7 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
   
   for (i in seq_along(runStatus)) {
     methodName <- names(runStatus)[i]
-    if (!is.null(runMethods) && !(methodName %in% runMethods)) next
+    if (!is.null(runMethods) && length(runMethods) > 0L && !(methodName %in% runMethods)) next
     
     cat("updating results for method '", methodName, "'\n", sep = "")
     

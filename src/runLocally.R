@@ -15,7 +15,7 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
   
   for (i in seq_len(nrow(methods))) {
     method <- methods[i,]
-    if (!is.null(runMethods) && !(method$name %in% runMethods)) next
+    if (!is.null(runMethods) && length(runMethods) > 0L && !(method$name %in% runMethods)) next
     
     cat("fitting method '", method$name, "'\n", sep = "")
     

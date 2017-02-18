@@ -53,7 +53,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
   
   for (i in seq_along(methodNames)) {
     methodName <- methodNames[i]
-    if (!is.null(runMethods) && !(methodName %in% runMethods)) next
+    if (!is.null(runMethods) && length(runStatus) > 0L && !(methodName %in% runMethods)) next
   
     cat("updating run status for method '", methodName, "'\n", sep = "")
     

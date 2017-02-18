@@ -8,19 +8,9 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
   
   for (i in seq_len(nrow(methods))) {
     method <- methods[i,]
-    if (!is.null(runMethods) && !(method$name %in% runMethods)) next
+    if (!is.null(runMethods) && length(runMethods) > 0L && !(method$name %in% runMethods)) next
     
     if (file.exists(file.path(dirs$results, paste0(method$name, ".tar.gz")))) next
-    
-    moduleString <- "module load r/intel/3.2.2"
-    if (method$language == "python") {
-      moduleString <- paste0(moduleString, "; ",
-                             "module switch gcc gcc/4.9.2; ",
-                             "module load scikit-learn/intel/0.17b1")
-    } else if (method$language == "stata") {
-      moduleString <- paste0(moduleString, "; ",
-                             "module load stata/14.0")
-    }
     
     for (j in seq_along(runCaseNames)) {
       if (all(runStatus[[i]][[j]]$status %in% c("complete", "hung"))) next
