@@ -127,7 +127,7 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
       }
       coverage = function(data, results, results.ind) {
         te <- mean(data$mu.1[data$z == 1] - data$mu.0[data$z == 1])
-        results$ci_lower <= te && te <= resutls$ci_upper
+        results$ci_lower <= te && te <= results$ci_upper
       })' > evaluation_functions.R
     
     ## run methods
