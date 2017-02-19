@@ -13,7 +13,7 @@ RUNDIR=$HOME/acic
 export METHOD=_METHOD_
 export RUNCASE=_RUNCASE_
 export DATA_DIR=_DATA_DIR_
-export METHOD_DIR=_METHOD_DIR_
+export COMMAND_DIR=_COMMAND_DIR_
 
 rm -f $RUNDIR/log/_JOBNAME_.error
 rm -f $RUNDIR/log/_JOBNAME_.log

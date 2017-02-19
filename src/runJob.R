@@ -4,7 +4,7 @@ method <- Sys.getenv("METHOD")
 runCaseName <- Sys.getenv("RUNCASE")
 
 dataDir <- Sys.getenv("DATA_DIR")
-methodDir <- Sys.getenv("METHOD_DIR")
+commandDir <- Sys.getenv("COMMAND_DIR")
 
 runCases <- read.csv("runCases.csv")
 methods <- read.csv("methods.csv", stringsAsFactors = TRUE)
@@ -21,7 +21,7 @@ rm(x.comp)
 inFile <- tempfile(fileext = ".csv")
 
 method <- methods[methods$name == method,]
-command <- file.path(methodDir, method$name)
+command <- file.path(commandDir, method$name)
 
 iters <- runStatus$iter
 runCaseDir <- gsub("\\/", .Platform$file.sep, runCaseName)

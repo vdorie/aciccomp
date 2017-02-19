@@ -21,7 +21,7 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
       
       args <- c("-r", "-e",
                 paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_|", j, "|;",
-                       "s|_DATA_DIR_|", dirs$data, "|;s|_METHOD_DIR_|", dirs$methods, "|;",
+                       "s|_DATA_DIR_|", dirs$data, "|;s|_COMMAND_DIR_|", dirs$methods, "|;",
                        "s|_JOBNAME_|", jobName, "|'"))
       system2("sed", args,
               stdin  = "template.pbs",
