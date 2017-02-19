@@ -55,7 +55,7 @@ for (i in seq_along(iters)) {
     args <- c(args, outFile.ind)
   }
   
-  cat(setting, ",", iters[i], ",", sep = "")
+  cat(runCaseName, ",", iters[i], ",", sep = "")
   startTime <- proc.time()
   consoleLog <- system2(command, args, stdout = TRUE, stderr = TRUE)
   timeDiff <- proc.time() - startTime
