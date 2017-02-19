@@ -1,10 +1,9 @@
 ## gets important values from the environment, expects to be run in a directory
-## where runCases.csv, methods.csv, and runStatus.Rdata all exist
+## where runCases.csv, methods.csv, runStatus.Rdata, and site_setup.R all exist
 method <- Sys.getenv("METHOD")
 runCaseName <- Sys.getenv("RUNCASE_NAME")
 
-dataDir <- Sys.getenv("DATA_DIR")
-commandDir <- Sys.getenv("COMMAND_DIR")
+source("site_setup.R")
 
 runCases <- read.csv("runCases.csv")
 methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
@@ -13,7 +12,7 @@ load("runStatus.Rdata")
 method <- methods[methods$name == method,]
 runStatus <- runStatus[[which(methods$name == method$name)]][[which(names(runStatus[[1L]]) == runCaseName)]]
 
-x.comp <- read.csv(file.path(dataDir, "x.csv"))
+x.comp <- read.csv(file.path(dirs$data, "x.csv"))
 
 df <- data.frame(z = integer(nrow(x.comp)), y = numeric(nrow(x.comp)))
 for (i in seq_along(x.comp)) df[[names(x.comp)[i]]] <- x.comp[[i]]
@@ -21,13 +20,12 @@ rm(x.comp)
 
 inFile <- tempfile(fileext = ".csv")
 
-command <- file.path(commandDir, method$name)
+command <- file.path(dirs$methods, method$name)
 
 iters <- runStatus$iter
 runCaseDir <- gsub("\\/", .Platform$file.sep, runCaseName)
 
-
-resultsDir <- file.path(resultsDir, method$name, runCaseDir)
+resultsDir <- file.path(dirs$results, method$name, runCaseDir)
 if (!dir.exists(resultsDir)) dir.create(resultsDir, recursive = TRUE)
 
 currentResultIndices <- which(runStatus$status %in% c("complete", "hung"))
@@ -35,7 +33,7 @@ if (length(currentResultIndices) == length(iters)) { unlink(inFile); q("no") }
 
 cat("fitting method '", method$name, "' in setting '", runCaseName, "'\n", sep = "")
 
-dataDir <- file.path(dataDir, runCaseDir)
+dataDir <- file.path(dirs$data, runCaseDir)
 
 for (i in seq_along(iters)) {
   if (i %in% currentResultIndices) next

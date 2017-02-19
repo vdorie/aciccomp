@@ -12,8 +12,6 @@ RUNDIR=$HOME/aciccomp
 
 export METHOD=_METHOD_
 export RUNCASE_NAME=_RUNCASE_NAME_
-export DATA_DIR=_DATA_DIR_
-export COMMAND_DIR=_COMMAND_DIR_
 
 rm -f $RUNDIR/log/_JOBNAME_.error
 rm -f $RUNDIR/log/_JOBNAME_.log
