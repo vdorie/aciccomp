@@ -28,8 +28,8 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
       logDir <- file.path(dirs$log, method$name)
       if (!dir.exists(logDir)) dir.create(logDir, recursive = TRUE)
       
-      logFile <- file.path(logDir, paste0(gsub("\\/", "_", runCaseNames[j]), ".log"))
-      errorFile <- file.path(logDir, paste0(gsub("\\/", "_", runCaseNames[j]), ".error"))
+      logFile <- file.path(logDir, paste0(gsub("\\/", "_", runCaseNames[j]), ".o"))
+      errorFile <- file.path(logDir, paste0(gsub("\\/", "_", runCaseNames[j]), ".e"))
       logCon <- file(logFile, "wt")
       errorCon <- file(errorFile, "wt")
       

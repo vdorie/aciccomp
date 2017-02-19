@@ -1,20 +1,21 @@
-#!/bin/sh
+#!/bin/bash
+
 #PBS -l nodes=1:ppn=1
 #PBS -l walltime=24:00:00
 #PBS -l mem=8GB
 #PBS -N _JOBNAME_
-#PBS -M vjd4@nyu.edu
+#PBS -M vdorie@gmail.com
 #PBS -m a
-#PBS -e $HOME/aciccomp/log/_JOBNAME_.error
-#PBS -o $HOME/aciccomp/log/_JOBNAME_.log
+#PBS -e $HOME/aciccomp/log/_JOBNAME_.e
+#PBS -o $HOME/aciccomp/log/_JOBNAME_.o
 
 RUNDIR=$HOME/aciccomp
 
 export METHOD=_METHOD_
 export RUNCASE_NAME=_RUNCASE_NAME_
 
-rm -f $RUNDIR/log/_JOBNAME_.error
-rm -f $RUNDIR/log/_JOBNAME_.log
+rm -f $RUNDIR/log/_JOBNAME_.e
+rm -f $RUNDIR/log/_JOBNAME_.o
 
 cd $RUNDIR
-R --no-save < src/runJob.R
+/apps/bin/R --no-save < src/runJob.R
