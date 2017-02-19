@@ -8,7 +8,7 @@
 #PBS -e $HOME/aciccomp/log/_JOBNAME_.error
 #PBS -o $HOME/aciccomp/log/_JOBNAME_.log
 
-RUNDIR=$HOME/acic
+RUNDIR=$HOME/aciccomp
 
 export METHOD=_METHOD_
 export RUNCASE=_RUNCASE_
