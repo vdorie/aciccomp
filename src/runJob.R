@@ -7,9 +7,10 @@ dataDir <- Sys.getenv("DATA_DIR")
 commandDir <- Sys.getenv("COMMAND_DIR")
 
 runCases <- read.csv("runCases.csv")
-methods <- read.csv("methods.csv", stringsAsFactors = TRUE)
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
 load("runStatus.Rdata")
 
+method <- methods[methods$name == method,]
 runStatus <- runStatus[[which(methods$name == method$name)]][[which(names(runStatus[[1L]]) == runCaseName)]]
 
 x.comp <- read.csv(file.path(dataDir, "x.csv"))
@@ -20,7 +21,6 @@ rm(x.comp)
 
 inFile <- tempfile(fileext = ".csv")
 
-method <- methods[methods$name == method,]
 command <- file.path(commandDir, method$name)
 
 iters <- runStatus$iter
