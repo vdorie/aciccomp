@@ -20,7 +20,7 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
       jobFile <- file.path(dirs$job, paste0(jobName, ".pbs"))
       
       args <- c("-r", "-e",
-                paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_|", j, "|;",
+                paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_NAME_|", runCaseNames[j], "|;",
                        "s|_DATA_DIR_|", dirs$data, "|;s|_COMMAND_DIR_|", dirs$methods, "|;",
                        "s|_JOBNAME_|", jobName, "|'"))
       system2("sed", args,

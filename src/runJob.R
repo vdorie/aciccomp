@@ -1,7 +1,7 @@
 ## gets important values from the environment, expects to be run in a directory
 ## where runCases.csv, methods.csv, and runStatus.Rdata all exist
 method <- Sys.getenv("METHOD")
-runCaseName <- Sys.getenv("RUNCASE")
+runCaseName <- Sys.getenv("RUNCASE_NAME")
 
 dataDir <- Sys.getenv("DATA_DIR")
 commandDir <- Sys.getenv("COMMAND_DIR")
