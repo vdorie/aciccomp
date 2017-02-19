@@ -5,8 +5,8 @@
 #PBS -N _JOBNAME_
 #PBS -M vjd4@nyu.edu
 #PBS -m a
-#PBS -e $HOME/log/_JOBNAME_.error
-#PBS -o $HOME/log/_JOBNAME_.log
+#PBS -e $HOME/aciccomp/log/_JOBNAME_.error
+#PBS -o $HOME/aciccomp/log/_JOBNAME_.log
 
 RUNDIR=$HOME/acic
 
@@ -15,8 +15,8 @@ export RUNCASE=_RUNCASE_
 export DATA_DIR=_DATA_DIR_
 export METHOD_DIR=_METHOD_DIR_
 
-rm -f $HOME/log/_JOBNAME_.error
-rm -f $HOME/log/_JOBNAME_.log
+rm -f $RUNDIR/log/_JOBNAME_.error
+rm -f $RUNDIR/log/_JOBNAME_.log
 
 cd $RUNDIR
 R --no-save < src/runJob.R
