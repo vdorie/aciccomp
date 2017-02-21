@@ -51,6 +51,16 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
   methodNames <- names(runStatus)
   runCaseNames <- names(runStatus[[1L]])
   
+  currentJobs <- system2("grep", c("-Ee", "'^\\s+[0-9]+\\s+.*'"), stdout = TRUE,
+                         input = system2("qstat", stdout = TRUE))
+  currentJobs <- sapply(currentJobs, function(job) strsplit(trimws(job), "\\s+"))
+  currentJobs <- data.frame(id     = unname(sapply(currentJobs, function(job) job[1L])),
+                            status = unname(sapply(currentJobs, function(job) job[5L])), stringsAsFactors = FALSE)
+  currentJobs$name <- if (nrow(currentJobs) > 0L) sapply(seq_len(nrow(currentJobs)), function(i) {
+    system2("sed", c("-nEe", "'s/^job_name:\\s+(\\S+)$/\\1/p'"), stdout = TRUE,
+            input = system2("qstat", c("-j", currentJobs$id[i]), stdout = TRUE))
+  }) else character(0L)
+  
   for (i in seq_along(methodNames)) {
     methodName <- methodNames[i]
     if (!is.null(runMethods) && length(runStatus) > 0L && !(methodName %in% runMethods)) next
@@ -60,6 +70,9 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
     for (j in seq_along(runCaseNames)) {
       resultsDir <- file.path(dirs$results, methodName, gsub("\\/", .Platform$file.sep, runCaseNames[j]))
       iters <- runStatus[[i]][[j]]$iter
+      
+      jobName <- paste0(methodName, "_", runCaseNames[j])
+      if (jobName %in% currentJobs$name) next
       
       if (dir.exists(resultsDir)) {
 	for (k in seq_along(iters)) {

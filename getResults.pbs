@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#PBS -N getResults
+#PBS -M vdorie@gmail.com
+#PBS -m a
+#PBS -e $HOME/aciccomp/log/getResults.e
+#PBS -o $HOME/aciccomp/log/getResults.o
+
+RUNDIR=$HOME/aciccomp
+
+rm -f $RUNDIR/getResults.e
+rm -f $RUNDIR/getResults.o
+
+RUN_METHODS=
+
+cd $RUNDIR
+bin/getResults $RUN_METHODS

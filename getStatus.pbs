@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#PBS -N getStatus
+#PBS -M vdorie@gmail.com
+#PBS -m a
+#PBS -e $HOME/aciccomp/log/getStatus.e
+#PBS -o $HOME/aciccomp/log/getStatus.o
+
+RUNDIR=$HOME/aciccomp
+
+rm -f $RUNDIR/getStatus.e
+rm -f $RUNDIR/getStatus.o
+
+RUN_METHODS=
+
+cd $RUNDIR
+bin/getStatus $RUN_METHODS
