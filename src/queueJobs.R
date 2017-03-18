@@ -15,12 +15,14 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
     for (j in seq_along(runCaseNames)) {
       if (all(runStatus[[i]][[j]]$status %in% c("complete", "hung"))) next
       
-      jobName <- paste0(method$name, "_", gsub("/", "_", runCaseNames[j]))
+      runCaseName <- gsub("/", "_", runCaseNames[j])
+      
+      jobName <- paste0(method$name, "_", runCaseName)
       
       jobFile <- file.path(dirs$job, paste0(jobName, ".pbs"))
       
       args <- c("-r", "-e",
-                paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_NAME_|\"", runCaseNames[j], "\"|;",
+                paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_NAME_|", runCaseName, "|;",
                        "s|_JOBNAME_|", jobName, "|'"))
       system2("sed", args,
               stdin  = "template.pbs",
