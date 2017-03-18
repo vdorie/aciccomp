@@ -12,6 +12,8 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
     
     if (file.exists(file.path(dirs$results, paste0(method$name, ".tar.gz")))) next
     
+    if (!dir.exists(file.path(dirs$log, method$name))) dir.create(file.path(dirs$log, method$name))
+    
     for (j in seq_along(runCaseNames)) {
       if (all(runStatus[[i]][[j]]$status %in% c("complete", "hung"))) next
       

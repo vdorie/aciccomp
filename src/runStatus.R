@@ -108,7 +108,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
 	}
       }
       
-      logFileName <- paste0(gsub("\\/", "_", runCaseNames[j]), ".o")
+      logFileName <- paste0(gsub("/", "_", runCaseNames[j]), ".o")
       logFile <- file.path(dirs$log, methodName, logFileName)
       if (file.exists(logFile)) {
 	suppressWarnings(rawRunTimes <- system2("grep", c("-E", paste0("'^", runCaseNames[j], ",[0-9]+,([0-9.]+|(NA))$'")),
