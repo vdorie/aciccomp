@@ -3,6 +3,7 @@
 *.swp
 data/*
 log/*
+job/*
 results/*
 methods/*
 methods.csv
