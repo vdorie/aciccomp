@@ -57,6 +57,8 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
       
       runCaseName <- names(runStatus[[i]])[j]
       
+      dgp <- read.csv(file.path(dirs$data, runCaseName, "dgp.csv"))
+      
       for (iter in which(unevaluatedIndices)) {
         dataFile        <- file.path(dirs$data, runCaseName, paste0(iter, ".csv"))
         resultsFile     <- file.path(dirs$results, methodName, runCaseName, paste0(iter, ".csv"))
@@ -67,7 +69,7 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
         results.ij.ind <- if (file.exists(resultsFile.ind)) read.csv(resultsFile.ind) else NULL
         
         for (k in seq_along(functions)) {
-          results[[names(functions)[k]]][i,j,iter] <- functions[[k]](data, results.ij, results.ij.ind)
+          results[[names(functions)[k]]][i,j,iter] <- functions[[k]](data, dgp, results.ij, results.ij.ind)
         }
       }
     }

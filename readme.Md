@@ -82,7 +82,7 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
   * `create_runcases` - scans the `data` directory and tracks the number of unique simulation settings and iterations under each
   * `update_runstatus [method ...]` - creates or updates the `runStatus` file by examining the `results` and `log` directories; optionally updates only for methods listed
   * `create_results result [result ...]` - creates a `results` object with named elements corresponding to the results listed on the command line
-  * `update_results evaluation_functions.R` - updates the `results` object by using the functions defined in its first argument to collapse the data and estimate down to a single-value summary; `evaluation_functions.R` must define an object `evaluation_functions` that is a named list of functions with the prototype `function(data, results, results.ind)`, where good `results.ind` is supplied only if the method provides individual treatment effect estimates
+  * `update_results evaluation_functions.R` - updates the `results` object by using the functions defined in its first argument to collapse the data and estimate down to a single-value summary; `evaluation_functions.R` must define an object `evaluation_functions` that is a named list of functions with the prototype `function(data, dgp, results, results.ind)`, where `results.ind` is supplied only if the method provides individual treatment effect estimates
   * `run_locally [method ...]` - runs methods against datasets on the local machine; optionally does so only for the methods listed
   * `queue_jobs [method ...]` - copies and `template.pbs` to the `job` folder, edits it, and spawns off a process for each method and each simulation setting; optionally does so only for the methods listed
   * `print_runstatus [method ...]` - summarizes the run status in terms of those missing, hung, etc; optionally does so only for the methods listed
@@ -122,11 +122,11 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
     
     ## define evaluation procedure
     echo 'evaluation_functions <- list(
-      bias = function(data, results, results.ind) {
-        mean(data$mu.1[data$z == 1] - data$mu.0[data$z == 1]) - results$est
+      bias = function(data, dgp, results, results.ind) {
+        mean(dgp$alpha[data$z == 1]) - results$est
       }
       coverage = function(data, results, results.ind) {
-        te <- mean(data$mu.1[data$z == 1] - data$mu.0[data$z == 1])
+        te <- mean(dgp$alpha[data$z == 1])
         results$ci_lower <= te && te <= results$ci_upper
       })' > evaluation_functions.R
     
