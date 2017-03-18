@@ -1,7 +1,7 @@
 ## gets important values from the environment, expects to be run in a directory
 ## where runCases.csv, methods.csv, runStatus.Rdata, and site_setup.R all exist
 method <- Sys.getenv("METHOD")
-runCaseName <- Sys.getenv("RUNCASE_NAME")
+runCaseName <- gsub("_", "/", Sys.getenv("RUNCASE_NAME"))
 
 source("site_setup.R")
 

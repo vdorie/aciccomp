@@ -3,8 +3,8 @@
 #PBS -N _JOBNAME_
 #PBS -M vdorie@gmail.com
 #PBS -m a
-#PBS -e $HOME/aciccomp/log/_JOBNAME_.e
-#PBS -o $HOME/aciccomp/log/_JOBNAME_.o
+#PBS -e $HOME/aciccomp/log/_METHOD_/_RUNCASE_NAME_.e
+#PBS -o $HOME/aciccomp/log/_METHOD_/_RUNCASE_NAME_.o
 
 RUNDIR=$HOME/aciccomp
 

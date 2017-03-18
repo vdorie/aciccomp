@@ -85,7 +85,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
       resultsDir <- file.path(dirs$results, methodName, gsub("\\/", .Platform$file.sep, runCaseNames[j]))
       iters <- runStatus[[i]][[j]]$iter
       
-      jobName <- paste0(methodName, "_", runCaseNames[j])
+      jobName <- paste0(methodName, "_", gsub("/", "_", runCaseNames[j]))
       if (jobName %in% currentJobs$name) next
       
       if (dir.exists(resultsDir)) {
