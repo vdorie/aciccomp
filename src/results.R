@@ -64,7 +64,7 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
         resultsFile     <- file.path(dirs$results, methodName, runCaseName, paste0(iter, ".csv"))
         resultsFile.ind <- file.path(dirs$results, methodName, runCaseName, paste0(iter, "_ind.csv"))
         
-        data <- read.csv(dataFile)
+        data <- read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
         results.ij <- read.csv(resultsFile)
         results.ij.ind <- if (file.exists(resultsFile.ind)) read.csv(resultsFile.ind) else NULL
         
