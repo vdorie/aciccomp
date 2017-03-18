@@ -86,7 +86,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
       iters <- runStatus[[i]][[j]]$iter
       
       jobName <- paste0(methodName, "_", gsub("/", "_", runCaseNames[j]))
-      if (jobName %in% currentJobs$name && currentJobs$status[match(jobName, currentJobs$name)] == "r") next
+      if (jobName %in% currentJobs$name && any(currentJobs$status[match(jobName, currentJobs$name)] == "r")) next
       
       if (dir.exists(resultsDir)) {
 	for (k in seq_along(iters)) {
