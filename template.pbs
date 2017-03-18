@@ -11,8 +11,8 @@ RUNDIR=$HOME/aciccomp
 export METHOD=_METHOD_
 export RUNCASE_NAME=_RUNCASE_NAME_
 
-rm -f $RUNDIR/log/_JOBNAME_.e
-rm -f $RUNDIR/log/_JOBNAME_.o
+#rm -f $RUNDIR/log/_JOBNAME_.e
+#rm -f $RUNDIR/log/_JOBNAME_.o
 
 cd $RUNDIR
 /apps/bin/R --no-save < src/runJob.R
