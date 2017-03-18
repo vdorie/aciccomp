@@ -52,7 +52,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
   runCaseNames <- names(runStatus[[1L]])
   
   
-  currentJobs <- data.frame(id = integer(0L), status = character(0L), name = character(0L))
+  currentJobs <- data.frame(id = integer(0L), status = character(0L), name = character(0L), stringsAsFactors = FALSE)
   
   qstatPath <- suppressWarnings(system2("command", c("-v", "qstat"), stdout = TRUE))
   if (length(qstatPath) > 0L) {
@@ -61,7 +61,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
     if (file.info(jobsFile)$size > 0L) {
       currentJobs <- system2("grep", c("-Ee", "'^\\s+[0-9]+\\s+.*'"),
                              stdout = TRUE,
-                             input = jobsFile)
+                             stdin  = jobsFile)
       if (length(currentJobs) > 0L) {
         currentJobs <- sapply(currentJobs, function(job) strsplit(trimws(job), "\\s+"))
         currentJobs <- data.frame(id     = unname(sapply(currentJobs, function(job) job[1L])),
