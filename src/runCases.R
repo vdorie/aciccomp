@@ -5,7 +5,7 @@ collectRunCasesFromDirectory <- function(dirs) {
   
   topLevelDirs <- list.dirs(dirs$data, recursive = FALSE, full.names = FALSE)
   for (dir in topLevelDirs) {
-    files <- strsplit(list.files(file.path(dirs$data, dir), recursive = TRUE), .Platform$file.sep)
+    files <- strsplit(list.files(file.path(dirs$data, dir), "^[0-9]+\\.csv", recursive = TRUE), .Platform$file.sep)
     
     ## force '/' as separator
     names <- sapply(files, function(file) if (length(file) > 1L) paste0(dir, "/", paste0(head(file, -1L), collapse = "/")) else dir)
