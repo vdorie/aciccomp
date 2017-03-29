@@ -77,7 +77,7 @@ for (i in seq_along(iters)) {
       write.csv(result, file = outFile.ind, row.names = FALSE)
     }
   } else {
-    cat(timeDiff[["sys.child"]], "\n", sep = "")
+    cat(timeDiff[["sys.child"]] + timeDiff[["user.child"]], "\n", sep = "")
   }
 }
 
