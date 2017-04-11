@@ -5,6 +5,7 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
   runCaseNames <- names(runStatus[[1L]])
   
   if (!dir.exists(dirs$job)) dir.create(dirs$job, recursive = TRUE)
+  if (!dir.exists(dirs$log)) dir.create(dirs$log, recursive = TRUE)
   
   for (i in seq_len(nrow(methods))) {
     method <- methods[i,]
@@ -12,16 +13,16 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
     
     if (file.exists(file.path(dirs$results, paste0(method$name, ".tar.gz")))) next
     
+    if (!dir.exists(file.path(dirs$job, method$name))) dir.create(file.path(dirs$job, method$name))
     if (!dir.exists(file.path(dirs$log, method$name))) dir.create(file.path(dirs$log, method$name))
     
     for (j in seq_along(runCaseNames)) {
       if (all(runStatus[[i]][[j]]$status %in% c("complete", "hung"))) next
       
       runCaseName <- gsub("/", "_", runCaseNames[j])
-      
       jobName <- paste0(method$name, "_", runCaseName)
       
-      jobFile <- file.path(dirs$job, paste0(jobName, ".pbs"))
+      jobFile <- file.path(dirs$job, method$name, paste0(runCaseName, ".pbs"))
       
       args <- c("-r", "-e",
                 paste0("'s|_METHOD_|", method$name, "|;s|_RUNCASE_NAME_|", runCaseName, "|;",

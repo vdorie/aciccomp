@@ -4,6 +4,7 @@ createRunStatus <- function(runCases, methods)
   names(runStatus) <- methods$name
   
   runCaseNames <- sort(unique(runCases$name))
+  runCaseNames <- gsub(.Platform$file.sep, "\\/", runCaseNames)
   statuses <- c("NA", "missing", "broken", "failed", "hung", "complete")
   
   for (i in seq_len(nrow(methods))) {
@@ -85,7 +86,8 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
       resultsDir <- file.path(dirs$results, methodName, gsub("\\/", .Platform$file.sep, runCaseNames[j]))
       iters <- runStatus[[i]][[j]]$iter
       
-      jobName <- paste0(methodName, "_", gsub("/", "_", runCaseNames[j]))
+      runCaseName <- gsub("/", "_", runCaseNames[j])
+      jobName <- paste0(methodName, "_", runCaseName)
       if (jobName %in% currentJobs$name && any(currentJobs$status[match(jobName, currentJobs$name)] == "r")) next
       
       if (dir.exists(resultsDir)) {
@@ -108,10 +110,11 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
 	}
       }
       
-      logFileName <- paste0(gsub("/", "_", runCaseNames[j]), ".o")
+      
+      logFileName <- paste0(runCaseName, ".o")
       logFile <- file.path(dirs$log, methodName, logFileName)
       if (file.exists(logFile)) {
-	suppressWarnings(rawRunTimes <- system2("grep", c("-Ee", paste0("'^", runCaseNames[j], ",[0-9]+,([0-9.]+|(NA))$'")),
+	suppressWarnings(rawRunTimes <- system2("grep", c("-Ee", paste0("'^", runCaseName, ",[0-9]+,([0-9.]+|(NA))$'")),
 			                        stdin = logFile, stdout = TRUE))
 	if (length(rawRunTimes) == 0L || !is.null(attr(rawRunTimes, "status"))) {
 	  cat("  warning: could not parse ", paste0(methodName, .Platform$file.sep, logFileName), "\n", sep = "")
