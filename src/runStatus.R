@@ -83,7 +83,7 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
     cat("updating run status for method '", methodName, "'\n", sep = "")
     
     for (j in seq_along(runCaseNames)) {
-      resultsDir <- file.path(dirs$results, methodName, gsub("\\/", .Platform$file.sep, runCaseNames[j]))
+      resultsDir <- file.path(dirs$results, methodName, gsub("/", .Platform$file.sep, runCaseNames[j]))
       iters <- runStatus[[i]][[j]]$iter
       
       runCaseName <- gsub("/", "_", runCaseNames[j])

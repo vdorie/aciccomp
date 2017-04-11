@@ -55,7 +55,7 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
       
       if (!any(unevaluatedIndices)) next
       
-      runCaseName <- names(runStatus[[i]])[j]
+      runCaseName <- gsub("/", .Platform$file.sep, names(runStatus[[i]])[j])
       
       dgp <- read.csv(file.path(dirs$data, runCaseName, "dgp.csv"))
       
