@@ -52,7 +52,7 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
         df$z <- resp$z
         df$y <- resp$y
         #df$y <- ifelse(resp$z == 0L, resp$y_0, resp$y_1)
-        write.csv(df, file = inFile, row.names = FALSE)
+        write.csv(df, file = inFile, row.names = FALSE, col.names = method$headers_in == 1L)
         
         outFile <- file.path(resultsDir, paste0(iters[k], ".csv"))
         
@@ -74,7 +74,8 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
           cat("\n\n", file = errorCon)
           
           cat("NA\n", file = logCon)
-          write.csv(data.frame(est = NA_real_, ci_lower = NA_real_, ci_upper = NA_real_), file = outFile, row.names = FALSE)
+          result <- data.frame(est = NA_real_, ci_lower = NA_real_, ci_upper = NA_real_)
+          write.csv(result, file = outFile, row.names = FALSE, method$headers_out == 1L)
           
           if (method$individual_effects != 0L) {
             result <- data.frame(
@@ -82,7 +83,7 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
               ci_lower = rep_len(NA_real_, nrow(df)),
               ci_upper = rep_len(NA_real_, nrow(df)))
             
-            write.csv(result, file = outFile.ind, row.names = FALSE)
+            write.csv(result, file = outFile.ind, row.names = FALSE, method$headers_out == 1L)
           }
         } else {
           cat(timeDiff[["sys.child"]], "\n", sep = "", file = logCon)

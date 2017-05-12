@@ -39,13 +39,14 @@ removeMethodsFromResults <- function(results, methods) {
   results
 }
 
-updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL)
+updateResults <- function(runStatus, results, methods, dirs, functions, runMethods = NULL)
 {
   if (length(runStatus) == 0L) return(results)
   
   for (i in seq_along(runStatus)) {
     methodName <- names(runStatus)[i]
     if (!is.null(runMethods) && length(runMethods) > 0L && !(methodName %in% runMethods)) next
+    method <- methods[methods$name == methodName,]
     
     cat("updating results for method '", methodName, "'\n", sep = "")
     
@@ -65,8 +66,13 @@ updateResults <- function(runStatus, results, dirs, functions, runMethods = NULL
         resultsFile.ind <- file.path(dirs$results, methodName, runCaseName, paste0(iter, "_ind.csv"))
         
         data <- read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
-        results.ij <- read.csv(resultsFile)
-        results.ij.ind <- if (file.exists(resultsFile.ind)) read.csv(resultsFile.ind) else NULL
+        results.ij <- read.csv(resultsFile, header = method$headers_out == 1L)
+        results.ij.ind <- if (file.exists(resultsFile.ind)) read.csv(resultsFile.ind, header = method$headers_out == 1L) else NULL
+        
+        if (method$headers_out == 0L) {
+          colnames(results.ij) <- c("est", "ci_lower", "ci_upper")
+          if (!is.null(results.ij.ind)) colnames(results.ij.ind) <- colnames(results.ij)
+        }
         
         for (k in seq_along(functions)) {
           results[[names(functions)[k]]][i,j,iter] <- functions[[k]](data, dgp, results.ij, results.ij.ind)
