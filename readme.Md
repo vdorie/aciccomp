@@ -12,6 +12,7 @@ Because the contest contents are a secret, most of the important files go in sub
   * `results`
   * `job`
   * `src`
+  * `test`
 
 They can be located anywhere, but in general the code expects them to defined before running. The easiest way to do this to create a file `site_setup.R` at the top-level that will be `source`d and containing something like:
 
@@ -20,7 +21,8 @@ They can be located anywhere, but in general the code expects them to defined be
                  methods = "methods",
                  results = "results",
                  src     = "src",
-                 job     = "job")
+                 job     = "job",
+                 test    = "test")
 
 ## `data`
 
@@ -86,6 +88,7 @@ As indicated above, a number of helper commands have been placed in the `bin` fo
   * `run_locally [method ...]` - runs methods against datasets on the local machine; optionally does so only for the methods listed
   * `queue_jobs [method ...]` - copies and `template.pbs` to the `job` folder, edits it, and spawns off a process for each method and each simulation setting; optionally does so only for the methods listed
   * `print_runstatus [method ...]` - summarizes the run status in terms of those missing, hung, etc; optionally does so only for the methods listed
+  * `test_method method` - creates in and job files in the subdirectory `dirs$test/method` and submits the job file; all output is sent to the method's tet directory and the job file can be manually resubmitted in case of error
 
 # Examples
 

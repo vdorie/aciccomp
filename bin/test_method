@@ -1,0 +1,65 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(TRUE)
+
+if (length(args) != 1L)
+  stop("usage: test_method method")
+
+methodName <- args[[1L]]
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+if (!(methodName %in% methods$name))
+  stop("unrecognized method name '", args[[1L]], "'")
+
+method <- methods[which.max(methods$name %in% methodName),]
+
+load("runStatus.Rdata")
+
+source("site_setup.R")
+
+## create test df from first run case, first iter
+x.comp <- read.csv(file.path(dirs$data, "x.csv"))
+
+df <- data.frame(z = integer(nrow(x.comp)), y = numeric(nrow(x.comp)))
+for (i in seq_along(x.comp)) df[[names(x.comp)[i]]] <- x.comp[[i]]
+rm(x.comp)
+
+iter <- runStatus[[1L]][[1L]]$iter[1L]
+runCaseDir <- gsub("\\/", .Platform$file.sep, names(runStatus[[1L]])[1L])
+dataDir <- file.path(dirs$data, runCaseDir)
+
+dataFile <- file.path(dataDir, paste0(iter, ".csv"))
+resp <- read.csv(dataFile)
+
+df$z <- resp$z
+df$y <- resp$y
+rm(resp)
+
+dir.create(file.path(dirs$test, methodName), recursive = TRUE, showWarnings = FALSE)
+
+write.table(df, file.path(dirs$test, methodName, "in.csv"),
+            sep = ",", dec = ".",
+            row.names = FALSE, col.names = method$headers_in == 1L)
+
+jobFile <- file.path(dirs$test, methodName, "job.pbs")
+## write out job file
+writeLines(c(
+  "#!/bin/bash",
+  paste0("#PBS -N ", methodName, "_test"),
+  "#PBS -M vdorie@gmail.com",
+  "#PBS -m a",
+  paste0("#PBS -e ", file.path("$HOME", "aciccomp", dirs$test, methodName, "log.e")),
+  paste0("#PBS -o ", file.path("$HOME", "aciccomp", dirs$test, methodName, "log.o")),
+  "",
+  paste0("cd ", file.path("$HOME", "aciccomp")),
+  paste0(file.path("bin", methodName), " ",                ## bin/method
+         file.path(dirs$test, methodName, "in.csv"), " ", ## in file
+         file.path(dirs$test, methodName, "out.csv"),      ## out file
+         if (method$individual_effects == 1L)
+           paste0(" ", file.path(dirs$test, methodName, "out_ind.csv"))
+         else
+           ""),
+  ""),
+  jobFile)
+
+system2("qsub",  c("-C", "'#PBS'", jobFile))
+
