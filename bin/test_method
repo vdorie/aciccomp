@@ -51,7 +51,7 @@ writeLines(c(
   paste0("#PBS -o ", file.path("$HOME", "aciccomp", dirs$test, methodName, "log.o")),
   "",
   paste0("cd ", file.path("$HOME", "aciccomp")),
-  paste0(file.path("bin", methodName), " ",                ## bin/method
+  paste0(file.path("methods", methodName), " ",                ## methods/method
          file.path(dirs$test, methodName, "in.csv"), " ", ## in file
          file.path(dirs$test, methodName, "out.csv"),      ## out file
          if (method$individual_effects == 1L)
