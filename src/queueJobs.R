@@ -31,11 +31,9 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
               stdin  = "template.pbs",
               stdout = jobFile)
       cat("queueing ", jobName, ":\n", sep = "")
-      with(runStatus[[i]][[j]], cat("  ", sum(status == "NA"), " NA, ", sum(status == "missing"), " missing, ", sum(status == "failed"), " failed", sep = ""))
+      with(runStatus[[i]][[j]], cat("  ", sum(status == "NA"), " NA, ", sum(status == "missing"), " missing, ", sum(status == "failed"), " failed\n", sep = ""))
       if (!dryRun)
         system2("qsub", c("-C", "'#PBS'", jobFile))
-      if (dryRun)
-        cat("\n")
     }
   }
 }
