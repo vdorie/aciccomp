@@ -41,7 +41,8 @@ for (i in seq_along(iters)) {
   
   dataFile <- file.path(dataDir, paste0(iters[i], ".csv"))
   
-  resp <- read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
+  respHasHeaders <- grepl("['\"]z['\"]\\s*,\\s*['\"]y['\"]", readLines(dataFile, n = 1L), perl = TRUE)
+  resp <- if (respHasHeaders) read.csv(dataFile) else read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
   df$z <- resp$z
   df$y <- resp$y
   

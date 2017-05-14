@@ -177,3 +177,7 @@ It can be helpful to setup R on a new, shared environment to use a local library
     mkdir -p ~/.R/${R_PLATFORM}-library/${R_VERSION}
     unset R_PLATFORM
     unset R_VERSION
+
+Finally, some cluster environments do not allow running `R` from the login host. An interactive shell can be scheduled using the `qlogin` command. Furthermore, and at least on the Chicago Booth Grid, not every host reachable from a queue can submit jobs. To reach a specific, valid host run a command such as:
+
+    qlogin -l hostname=bushgpu02.chicagobooth.edu
