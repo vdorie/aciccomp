@@ -28,7 +28,7 @@ runCaseDir <- gsub("\\/", .Platform$file.sep, names(runStatus[[1L]])[1L])
 dataDir <- file.path(dirs$data, runCaseDir)
 
 dataFile <- file.path(dataDir, paste0(iter, ".csv"))
-resp <- read.csv(dataFile)
+resp <- read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
 
 df$z <- resp$z
 df$y <- resp$y
@@ -44,6 +44,7 @@ jobFile <- file.path(dirs$test, methodName, "job.pbs")
 ## write out job file
 writeLines(c(
   "#!/bin/bash",
+  "",
   paste0("#PBS -N ", methodName, "_test"),
   "#PBS -M vdorie@gmail.com",
   "#PBS -m a",
@@ -51,9 +52,10 @@ writeLines(c(
   paste0("#PBS -o ", file.path("$HOME", "aciccomp", dirs$test, methodName, "log.o")),
   "",
   paste0("cd ", file.path("$HOME", "aciccomp")),
-  paste0(file.path("methods", methodName), " ",                ## methods/method
+  "",
+  paste0(file.path("methods", methodName), " ",           ## methods/method
          file.path(dirs$test, methodName, "in.csv"), " ", ## in file
-         file.path(dirs$test, methodName, "out.csv"),      ## out file
+         file.path(dirs$test, methodName, "out.csv"),     ## out file
          if (method$individual_effects == 1L)
            paste0(" ", file.path(dirs$test, methodName, "out_ind.csv"))
          else

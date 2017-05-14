@@ -48,7 +48,7 @@ runLocally <- function(runStatus, methods, dirs, runMethods = NULL)
         
         dataFile <- file.path(dataDir, paste0(iters[k], ".csv"))
         
-        resp <- read.csv(dataFile)
+        resp <- read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
         df$z <- resp$z
         df$y <- resp$y
         #df$y <- ifelse(resp$z == 0L, resp$y_0, resp$y_1)
