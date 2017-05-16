@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#PBS -N updateResults
+#PBS -M vdorie@gmail.com
+#PBS -m a
+#PBS -e $HOME/aciccomp/log/updateResults.e
+#PBS -o $HOME/aciccomp/log/updateResults.o
+
+RUN_METHODS=
+
+cd $HOME/aciccomp
+bin/update_results $RUN_METHODS
