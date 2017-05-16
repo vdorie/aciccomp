@@ -22,7 +22,6 @@ if (!is.null(runMethods) && any(!(runMethods %in% methods$name)))
 if (!file.exists(args[1L]))
   stop("cannot find file '", args[1L], "'")
 
-cat("args: ", args[1L], "\n", sep = "")
 source(args[1L], local = TRUE)
 
 if (!exists("evaluation_functions") || !is.list(evaluation_functions) || is.null(names(evaluation_functions)) ||

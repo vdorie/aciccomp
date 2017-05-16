@@ -46,7 +46,7 @@ updateResults <- function(runStatus, results, methods, dirs, functions, runMetho
   for (i in seq_along(runStatus)) {
     methodName <- names(runStatus)[i]
     if (!is.null(runMethods) && length(runMethods) > 0L && !(methodName %in% runMethods)) next
-    method <- methods[methods$name == methodName,]
+    method <- methods[which.max(methods$name %in% methodName),]
     
     cat("updating results for method '", methodName, "'\n", sep = "")
     
@@ -65,7 +65,8 @@ updateResults <- function(runStatus, results, methods, dirs, functions, runMetho
         resultsFile     <- file.path(dirs$results, methodName, runCaseName, paste0(iter, ".csv"))
         resultsFile.ind <- file.path(dirs$results, methodName, runCaseName, paste0(iter, "_ind.csv"))
         
-        data <- read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
+        respHasHeaders <- grepl("['\"]z['\"]\\s*,\\s*['\"]y['\"]", readLines(dataFile, n = 1L), perl = TRUE)
+        resp <- if (respHasHeaders) read.csv(dataFile) else read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
         results.ij <- read.csv(resultsFile, header = method$headers_out == 1L)
         results.ij.ind <- if (file.exists(resultsFile.ind)) read.csv(resultsFile.ind, header = method$headers_out == 1L) else NULL
         
@@ -75,7 +76,7 @@ updateResults <- function(runStatus, results, methods, dirs, functions, runMetho
         }
         
         for (k in seq_along(functions)) {
-          results[[names(functions)[k]]][i,j,iter] <- functions[[k]](data, dgp, results.ij, results.ij.ind)
+          results[[names(functions)[k]]][i,j,iter] <- functions[[k]](resp, dgp, results.ij, results.ij.ind)
         }
       }
     }
