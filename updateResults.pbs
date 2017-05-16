@@ -14,4 +14,4 @@ RUNDIR=$HOME/aciccomp
 RUN_METHODS=
 
 cd $RUNDIR
-bin/update_results $RUN_METHODS
+bin/update_results evaluation_functions.R $RUN_METHODS
