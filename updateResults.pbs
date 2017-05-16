@@ -6,7 +6,12 @@
 #PBS -e $HOME/aciccomp/log/updateResults.e
 #PBS -o $HOME/aciccomp/log/updateResults.o
 
+RUNDIR=$HOME/aciccomp
+
+rm -f $RUNDIR/log/updateResults.e
+rm -f $RUNDIR/log/updateResults.o
+
 RUN_METHODS=
 
-cd $HOME/aciccomp
+cd $RUNDIR
 bin/update_results $RUN_METHODS

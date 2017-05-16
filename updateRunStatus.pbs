@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#PBS -N updateRunStatus
+#PBS -M vdorie@gmail.com
+#PBS -m a
+#PBS -e $HOME/aciccomp/log/updateRunStatus.e
+#PBS -o $HOME/aciccomp/log/updateRunStatus.o
+
+RUNDIR=$HOME/aciccomp
+
+rm -f $RUNDIR/log/updateRunStatus.e
+rm -f $RUNDIR/log/updateRunStatus.o
+
+RUN_METHODS=
+
+cd $RUNDIR
+bin/update_runstatus $RUN_METHODS
