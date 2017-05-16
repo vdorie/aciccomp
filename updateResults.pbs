@@ -8,8 +8,8 @@
 
 RUNDIR=$HOME/aciccomp
 
-rm -f $RUNDIR/log/updateResults.e
-rm -f $RUNDIR/log/updateResults.o
+: > $SGE_STDOUT_PATH
+: > $SGE_STDERR_PATH
 
 RUN_METHODS=
 
