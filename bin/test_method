@@ -67,5 +67,5 @@ writeLines(c(
   ""),
   jobFile)
 
-system2("qsub",  c("-C", "'#PBS'", jobFile))
+system2("qsub",  c("-C", "'#PBS'", "-q", "short", jobFile))
 
