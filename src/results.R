@@ -53,8 +53,10 @@ updateResults <- function(runStatus, results, methods, dirs, functions, runMetho
     for (j in seq_along(runStatus[[i]])) {
       completedIndices <- runStatus[[i]][[j]]$status == "complete"
       unevaluatedIndices <- rep.int(FALSE, length(completedIndices))
-      for (k in seq_along(results))
+      for (k in seq_along(results)) {
+        if (names(results)[k] == "indiv" && method$individual_effects == 0L) next
         unevaluatedIndices <- unevaluatedIndices | is.na(results[[k]][i,j,])
+      }
       unevaluatedIndices <- unevaluatedIndices & completedIndices
       
       if (!any(unevaluatedIndices)) next
