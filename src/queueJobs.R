@@ -33,7 +33,7 @@ queueJobs <- function(runStatus, methods, dirs, runMethods = NULL, dryRun = FALS
       cat("queueing ", jobName, ":\n", sep = "")
       with(runStatus[[i]][[j]], cat("  ", sum(status == "NA"), " NA, ", sum(status == "missing"), " missing, ", sum(status == "failed"), " failed\n", sep = ""))
       if (!dryRun)
-        system2("qsub", c("-C", "'#PBS'", jobFile))
+        system2("qsub", c("-C", "'#PBS'", "-q", "short", jobFile))
     }
   }
 }
