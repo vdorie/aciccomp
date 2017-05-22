@@ -75,7 +75,7 @@ updateResults <- function(runStatus, results, methods, dirs, functions, runMetho
         results.ij <- read.csv(resultsFile, header = method$headers_out == 1L)
         results.ij.ind <- if (file.exists(resultsFile.ind)) read.csv(resultsFile.ind, header = method$headers_out == 1L) else NULL
         
-        if (method$headers_out == 0L) {
+        if (method$headers_out != 1L) {
           colnames(results.ij) <- c("est", "ci_lower", "ci_upper")
           if (!is.null(results.ij.ind)) colnames(results.ij.ind) <- colnames(results.ij)
         }
