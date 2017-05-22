@@ -25,7 +25,7 @@ for (i in seq_along(runStatus)) {
   
   printedName <- FALSE
   for (j in seq_along(runStatus[[i]])) {
-    if (sum(is.na(results[[1L]][i,j,])) != sum(runStatus[[i]][[j]]$status != "complete")) {
+    if (anyNA(results[[1L]][i,j,]) || any(runStatus[[i]][[j]]$status != "complete")) {
       if (!printedName) {
         cat("method ", methodName, ":\n", sep = "")
         printedName <- TRUE

@@ -45,7 +45,7 @@ removeMethodsFromRunStatus <- function(runStatus, methods)
 }
 
 ## dirs should be a named list with at least results and log
-updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
+updateRunStatus <- function(runStatus, dirs, methods, runMethods = NULL)
 {
   if (length(runStatus) == 0L) return(invisible(NULL))
   
@@ -79,7 +79,8 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
   for (i in seq_along(methodNames)) {
     methodName <- methodNames[i]
     if (!is.null(runMethods) && length(runStatus) > 0L && !(methodName %in% runMethods)) next
-  
+    method <- methods[which.max(methods$name %in% methodName),]
+    
     cat("updating run status for method '", methodName, "'\n", sep = "")
     
     for (j in seq_along(runCaseNames)) {
@@ -96,7 +97,8 @@ updateRunStatus <- function(runStatus, dirs, runMethods = NULL)
 	  
 	  resultsFile <- file.path(resultsDir, paste0(runStatus[[i]][[j]]$iter[k], ".csv"))
 	  if (file.exists(resultsFile)) {
-	    result <- read.csv(resultsFile)
+	    result <- read.csv(resultsFile, header = method$headers_out == 1L)
+            if (method$headers_out != 1L) colnames(result) <- c("est", "ci_lower", "ci_upper")
 	    if (is.null(result$est) || length(result$est) == 0L) {
 	      runStatus[[i]][[j]]$status[k] <- "broken"
 	    } else if (is.na(result$est)) {

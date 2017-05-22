@@ -19,6 +19,6 @@ if (!file.exists("runStatus.Rdata")) {
   load("runStatus.Rdata")
 }
 
-runStatus <- updateRunStatus(runStatus, dirs, runMethods)
+runStatus <- updateRunStatus(runStatus, dirs, methods, runMethods)
 
 save(runStatus, file = "runStatus.Rdata")
