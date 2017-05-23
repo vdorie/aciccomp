@@ -1,0 +1,12 @@
+#!/usr/bin/env Rscript
+
+source("site_setup.R")
+
+methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
+
+source(file.path(dirs$src, "queue.R"))
+
+currentJobs <- getCurrentJobs()
+
+print(currentJobs, row.names = FALSE)
+

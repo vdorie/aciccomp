@@ -1,5 +1,5 @@
 getCurrentJobs <- function() {
-  currentJobs <- data.frame(id = integer(0L), status = character(0L), name = character(0L), stringsAsFactors = FALSE)
+  currentJobs <- data.frame(id = integer(0L), name = character(0L), status = character(0L), stringsAsFactors = FALSE)
   
   qstatPath <- suppressWarnings(system2("command", c("-v", "qstat"), stdout = TRUE))
   
@@ -21,6 +21,7 @@ getCurrentJobs <- function() {
       currentJobs$name <- if (nrow(currentJobs) > 0L) sapply(seq_len(nrow(currentJobs)), function(i) {
         system2("sed", c("-nEe", "'s/^job_name:\\s+(\\S+)$/\\1/p'"), stdout = TRUE,
                 input = system2("qstat", c("-j", currentJobs$id[i]), stdout = TRUE))
+      currentJobs <- currentJobs[c(1L, 3L, 2L)]
       }) else character(0L)
     }
   }
