@@ -3,6 +3,12 @@ args <- commandArgs(TRUE)
 
 source("site_setup.R")
 
+checkRunning <- if (length(args) > 0L) sapply(args, function(x) x == "-r") else FALSE
+if (any(checkRunning)) {
+  args <- args[!checkRunning]
+  checkRunning <- TRUE
+}
+
 runMethods <- if (length(args) > 0L) args else NULL
 
 methods <- read.csv("methods.csv", stringsAsFactors = FALSE)
@@ -19,6 +25,11 @@ if (!file.exists("results.Rdata"))
 load("runStatus.Rdata")
 load("results.Rdata")
 
+source(file.path(dirs$src, "queue.R"))
+
+currentJobs <- if (checkRunning) getCurrentJobs() else
+  data.frame(id = integer(0L), status = character(0L), name = character(0L), stringsAsFactors = FALSE)
+
 for (i in seq_along(runStatus)) {
   methodName <- names(runStatus)[i]
   if (!is.null(runMethods) && !(methodName %in% runMethods)) next
@@ -33,6 +44,9 @@ for (i in seq_along(runStatus)) {
       
       result.ij <- results[[1L]][i,j,]
       status.ij <- runStatus[[i]][[j]]$status
+      jobName <- paste0(methodName, "_", gsub("/", "_", names(runStatus[[i]])[j]))
+      
+      running.ij <- jobName %in% currentJobs$name && currentJobs$status[which(jobName %in% currentJobs$name)] == "r"
       cat("  setting ", names(runStatus[[i]])[j], ": ", sum(is.na(result.ij)), " NA result, ", sum(status.ij == "missing"), " missing, ",
         sum(status.ij == "failed"), " failed, and ", sum(status.ij == "hung"), " hung\n", sep = "")
     }
