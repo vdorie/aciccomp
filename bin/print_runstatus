@@ -47,7 +47,7 @@ for (i in seq_along(runStatus)) {
       jobName <- paste0(methodName, "_", gsub("/", "_", names(runStatus[[i]])[j]))
       
       running.ij <- jobName %in% currentJobs$name && currentJobs$status[which(jobName %in% currentJobs$name)] == "r"
-      cat("  setting ", names(runStatus[[i]])[j], ": ", sum(is.na(result.ij)), " NA result, ", sum(status.ij == "missing"), " missing, ",
+      cat("  setting ", names(runStatus[[i]])[j], if (running.ij) " [R]" else "", ": ", sum(is.na(result.ij)), " NA result, ", sum(status.ij == "missing"), " missing, ",
         sum(status.ij == "failed"), " failed, and ", sum(status.ij == "hung"), " hung\n", sep = "")
     }
   }
