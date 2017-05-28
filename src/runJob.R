@@ -29,17 +29,17 @@ runCaseDir <- gsub("\\/", .Platform$file.sep, runCaseName)
 resultsDir <- file.path(dirs$results, method$name, runCaseDir)
 if (!dir.exists(resultsDir)) dir.create(resultsDir, recursive = TRUE)
 
-currentResultIndices <- which(runStatus$status %in% c("complete", "hung"))
-if (length(currentResultIndices) == length(iters)) { unlink(inFile); q("no") }
+currentResults <- runStatus$status %in% c("complete", "hung")
+if (sum(currentResults) == nrow(runStatus)) { unlink(inFile); q("no") }
+
+iters <- iters[!currentResults]
 
 cat("fitting method '", method$name, "' in setting '", runCaseName, "'\n", sep = "")
 
 dataDir <- file.path(dirs$data, runCaseDir)
 
-for (i in seq_along(iters)) {
-  if (i %in% currentResultIndices) next
-  
-  dataFile <- file.path(dataDir, paste0(iters[i], ".csv"))
+for (iter in iters) {
+  dataFile <- file.path(dataDir, paste0(iter, ".csv"))
   
   respHasHeaders <- grepl("['\"]z['\"]\\s*,\\s*['\"]y['\"]", readLines(dataFile, n = 1L), perl = TRUE)
   resp <- if (respHasHeaders) read.csv(dataFile) else read.csv(dataFile, header = FALSE, col.names = c("z", "y"))
@@ -48,22 +48,22 @@ for (i in seq_along(iters)) {
   
   write.table(df, file = inFile, sep = ",", dec = ".", row.names = FALSE, col.names = method$headers_in == 1L)
   
-  outFile <- file.path(resultsDir, paste0(iters[i], ".csv"))
+  outFile <- file.path(resultsDir, paste0(iter, ".csv"))
   
   args <- c(inFile, outFile)
   
   if (method$individual_effects != 0) {
-    outFile.ind <- file.path(resultsDir, paste0(iters[i], "_ind.csv"))
+    outFile.ind <- file.path(resultsDir, paste0(iter, "_ind.csv"))
     args <- c(args, outFile.ind)
   }
   
-  cat(gsub("/", "_", runCaseName), ",", iters[i], ",", sep = "")
+  cat(gsub("/", "_", runCaseName), ",", iter, ",", sep = "")
   startTime <- proc.time()
   consoleLog <- system2(command, args, stdout = TRUE, stderr = TRUE)
   timeDiff <- proc.time() - startTime
   
   if (!is.null(attr(consoleLog, "status"))) {
-    cat("error in: '", runCaseName, "' iter ", iters[i], "\n", sep = "", file = stderr())
+    cat("error in: '", runCaseName, "' iter ", iter, "\n", sep = "", file = stderr())
     cat(consoleLog, sep = "\n", file = stderr())
     cat("\n\n", file = stderr())
     
