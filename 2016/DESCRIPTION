@@ -1,0 +1,13 @@
+Package: aciccomp2016
+Version: 0.1-0
+Date: 2017-05-20
+Title: Atlantic Causal Inference Conference Competition 2016 Simulation
+Authors@R: c(person("Vincent Dorie", "Developer", role = c("aut", "cre"), email = "vdorie@gmail.com"))
+Depends: R (>= 3.2-2)
+Imports: stats, methods, utils
+Suggests: testthat
+Description: Generate simulation data.
+License: GPL (>= 2)
+NeedsCompilation: no
+Biarch: yes
+LazyData: yes

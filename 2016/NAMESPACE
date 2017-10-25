@@ -1,0 +1,10 @@
+export(dgp_2016, constants_2016)
+
+importFrom(stats, dnorm, pnorm, plogis, qlogis)
+importFrom(stats, rnorm, rgamma, rbinom, rbeta, rt, runif)
+importFrom(stats, cor, sd, lm, predict)
+importFrom(stats, optim, setNames)
+
+importFrom(utils, data, combn, tail)
+
+importFrom(methods, new, setClass, setGeneric, setMethod, is)
