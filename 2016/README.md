@@ -16,4 +16,4 @@ The raw data given to contestants in the 2016 competition is exported by the pac
 
     dgp_2016(input_2016, parameterNum, simulationNum)
 
-where `s parameterNum ` is in `1:77` and `simulationNum` is in `1:100`.
+where `parameterNum` is in `1:77` and `simulationNum` is in `1:100`.
