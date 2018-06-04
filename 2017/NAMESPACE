@@ -1,0 +1,5 @@
+export(dgp_2017)
+
+importFrom(stats, pnorm, qnorm, rnorm)
+importFrom(stats, rbinom)
+importFrom(stats, sd, var)
