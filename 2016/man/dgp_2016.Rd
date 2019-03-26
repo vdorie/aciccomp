@@ -52,12 +52,12 @@
   \item{\code{z}}{Vector of treatment assignments. If \code{extraInfo} is \code{FALSE}, \code{z}
                   contains 0s and 1s. If \code{TRUE}, \code{z} is a factor with levels \code{ctl}
                   and \code{trt}.}
-  \item{\code{y}}{Vector of observed response variables, $y(z)$.}
-  \item{\code{y.0}}{Vector of response variables under the control condition, $y(0)$.}
-  \item{\code{y.1}}{Vector of response variables under the treatment condition, $y(1)$.}
-  \item{\code{mu.0}}{Vector of expected response under the control condition, $E[Y(0)]$.}
-  \item{\code{mu.1}}{Vector of expected response under the treatment condition, $E[Y(1)]$.}
-  \item{\code{e}}{Vector of propensity scores, $P(Z = 1)$.}
+  \item{\code{y}}{Vector of observed response variables, \eqn{y(z)}.}
+  \item{\code{y.0}}{Vector of response variables under the control condition, \eqn{y(0)}.}
+  \item{\code{y.1}}{Vector of response variables under the treatment condition, \eqn{y(1)}.}
+  \item{\code{mu.0}}{Vector of expected response under the control condition, \eqn{E[Y(0)]}.}
+  \item{\code{mu.1}}{Vector of expected response under the treatment condition, \eqn{E[Y(1)]}.}
+  \item{\code{e}}{Vector of propensity scores, \eqn{P(Z = 1)}.}
   \item{\code{f.z}}{Optional - the GAF for the treatment assignment mechanism.}
   \item{\code{f.y}}{Optional - the GAF for the response surface.}
   \item{\code{x}}{Optional - the transformed input passed to \code{f.z} and \code{f.y}.}
@@ -72,9 +72,22 @@
 }
 \examples{
 \dontrun{
+# to test a method
+ate <- matrix(NA, 77, 100)
+for (i in seq_len(77)) {
+  for (j in seq_len(100)) {
+    sim <- dgp_2016(input_2016, i, j)
+    df <- input_2016
+    df$y <- sim$y
+    df$z <- sim$z
+    fit <- lm(y ~ ., df)
+    ate[i,j] <- coef(fit)["z"]
+  }
+}
+
+## undocumented features, getting closest approximate linear model
 sim <- dgp_2016(input_2016, 1, 1, extraInfo = TRUE)
 
-## undocumented features
 e <- aciccomp:::evaluate(sim$f.z, sim$x)
 x.z.approx <- aciccomp:::evaluateGeneralizedAdditiveFunctionToDataframe(sim$f.z, sim$x)
 

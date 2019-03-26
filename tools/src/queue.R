@@ -11,7 +11,7 @@ getCurrentJobs <- function() {
   jobsFile <- tempfile()
   system2("qstat", stdout = jobsFile)
   if (file.info(jobsFile)$size > 0L) {
-    currentJobs <- system2("grep", c("-Ee", "'^\\s+[0-9]+\\s+.*'"),
+    currentJobs <- system2("grep", c("-Ee", "'^\\s*[0-9]+\\s+.*'"),
                            stdout = TRUE,
                            stdin  = jobsFile)
     if (length(currentJobs) > 0L) {

@@ -7,6 +7,8 @@ checkRunning <- if (length(args) > 0L) sapply(args, function(x) x == "-r") else 
 if (any(checkRunning)) {
   args <- args[!checkRunning]
   checkRunning <- TRUE
+} else {
+  checkRunning <- FALSE
 }
 
 runMethods <- if (length(args) > 0L) args else NULL
