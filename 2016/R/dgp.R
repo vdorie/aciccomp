@@ -35,7 +35,7 @@ dgp_2016 <- function(x, parameters, random.seed, constants = constants_2016(), e
     ## random.seed is .Random.seed the object
     .GlobalEnv$.Random.seed <- random.seed
   } else {
-    if (is.numeric(random.seed)) random.seed <- list(seed = random.seed, kind = "Mersenne-Twister", normal.kind = "Inversion")
+    if (is.numeric(random.seed)) random.seed <- list(seed = random.seed, kind = "Mersenne-Twister", normal.kind = "Inversion", sample.kind = "Rounding")
     
     if (!is.list(random.seed))
       stop("random.seed must be a .Random.seed integer vector, an integer scalar, or a list containing the arguments to set.seed")
