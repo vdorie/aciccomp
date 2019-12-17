@@ -21,7 +21,7 @@ The rownames of the result matrix correspond to the parameter set and simulation
 
 ```R
 getParametersForIter <- function(i.row) {
-  c((i.row - 1L) %% nrow(aciccomp2016::parameters_2016) + 1L,
+  c((i.row - 1L) %%  nrow(aciccomp2016::parameters_2016) + 1L,
     (i.row - 1L) %/% nrow(aciccomp2016::parameters_2016) + 1L)
 }
 
