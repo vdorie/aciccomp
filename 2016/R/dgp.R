@@ -51,7 +51,7 @@ dgp_2016 <- function(x, parameters, random.seed, constants = constants_2016(), e
     ## seed manipulation in original
     random.seed[[seedPosition]] <- random.seed[[seedPosition]] * 5L + if (random.seed[[seedPosition]] <= 500L) 565L else 7565L
     
-    do.call("set.seed", random.seed)
+    suppressWarnings(do.call("set.seed", random.seed))
   }
   
   if (any(c("model.trt", "root.trt", "overlap.trt", "model.rsp", "alignment", "te.hetero") %not_in% names(parameters)))
