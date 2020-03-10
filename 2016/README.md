@@ -7,8 +7,11 @@ Data and simulations from the 2016 Atlantic Causal Inference competition.
 
 Steps to install from source:
 
-    install.packages("devtools")
-    devtools::install_github("vdorie/aciccomp/2016")
+    if (require("remotes", quietly = TRUE) == FALSE) {
+      install.packages("remotes")
+      require("remotes")
+    }
+    remotes::install_github("vdorie/aciccomp/2016")
 
 ## Usage
 
