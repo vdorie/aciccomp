@@ -5,16 +5,21 @@ This directory contains of the fitted values for the 15 original methods and 9 p
 
 ## Format
 
-Each RData file contains an object named `results`, which is itself a 7700 x matrix containing columns `sate` for the estimate, `sate.lower` for the lower 95% confidence bound, and `sate.upper` for the upper.
-
-In order to avoid name collisions, it is recommended to load each object in a special environment. For example:
+Each rds file is a 7700 x matrix containing columns `satt` for the estimate, `satt.lower` for the lower 95% confidence bound, and `satt.upper` for the upper. As an example of usage:
 
 ```R
-loadEnv <- new.env(parent = baseenv())
+> sl_bart_tmle_results <- readRDS("sl_bart_tmle.rds")
 
-load("sl_bart_tmle.RData", envir = loadEnv)
-# > dim(loadEnv$results)
-# [1] 7700    3
+> dim(sl_bart_tmle_results)
+[1] 7700    3
+> head(sl_bart_tmle_results)
+                                                       satt satt.lower satt.upper
+linear_0.35_one-term_linear_0.75_high_001          2.710912   2.432793   2.989031
+polynomial_0.35_one-term_exponential_0.75_none_001 4.643160   4.571654   4.714667
+linear_0.35_one-term_linear_0.75_none_001          6.591090   6.524476   6.657703
+polynomial_0.35_full_exponential_0.75_high_001     4.036371   3.848314   4.224428
+linear_0.35_one-term_exponential_0.75_high_001     3.430520   3.125533   3.735508
+polynomial_0.35_one-term_linear_0.75_high_001      2.995059   2.835973   3.154145
 ```
 
 The rownames of the result matrix correspond to the parameter set and simulation number, iterating first through the 77 cases and then through the 100 replications. Maps between row numbers and parameter/simulation number are given by:
