@@ -10,7 +10,7 @@
         from their original source, but correspond to possible confounders, instruments, and uncorrelated
         variables from a hypothetical twin study on the impact of birthweight on IQ.}
 \details{
-  The variable in the original CPP are:
+  The variables in the original CPP are:
   \itemize{
     \item \code{mom_age}
     \item \code{mar_status}
